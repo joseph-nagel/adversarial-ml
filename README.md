@@ -7,3 +7,5 @@ This repository contains an exploration of adversarial attacks and defenses.
 
 - [Introduction](notebooks/intro.ipynb)
 
+- [Adversarial attacks](notebooks/attacks.ipynb)
+
