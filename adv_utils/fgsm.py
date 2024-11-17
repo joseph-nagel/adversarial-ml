@@ -1,4 +1,4 @@
-'''Utilities.'''
+'''Fast-gradient sign method.'''
 
 from collections.abc import Callable, Sequence
 
