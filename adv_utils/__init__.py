@@ -1,6 +1,6 @@
 '''Adversarial ML tools.'''
 
-from . import attacks
+from . import attacks, utils
 
 from .attacks import (
     AdversarialAttack,
@@ -9,4 +9,6 @@ from .attacks import (
     fgsm_attack,
     pgd_attack
 )
+
+from .utils import download_file
 
