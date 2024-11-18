@@ -42,18 +42,17 @@ def fgsm_attack(
     model: nn.Module,
     criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
     image: torch.Tensor,
-    label: torch.Tensor | Sequence[int],
+    label: torch.Tensor | int | Sequence[int],
     eps: float,
     targeted: bool = False
 ) -> torch.Tensor:
     '''Perform a fast gradient-sign attack.'''
 
     # ensure tensor inputs
-    image = torch.as_tensor(image).detach().clone()
-    label = torch.as_tensor(label).detach().clone()
+    perturbed = torch.as_tensor(image).detach().clone()
 
-    # enable input gradients
-    image.requires_grad = True
+    label = torch.as_tensor(label).detach().clone()
+    label = torch.atleast_1d(label)
 
     # disable param gradients
     param_requires_grad = []
@@ -62,24 +61,25 @@ def fgsm_attack(
         param_requires_grad.append(p.requires_grad)
         p.requires_grad = False
 
-    # compute gradients
-    pred = model(image)
+    # enable input gradients
+    perturbed.requires_grad = True
 
+    # compute gradients
+    pred = model(perturbed)
     loss = criterion(pred, label)
 
     loss.backward()
+    grad = perturbed.grad.detach().clone()
 
-    grad = image.grad.detach().clone()
+    # disable input gradients
+    perturbed.requires_grad = False
 
-    # perturb input
-    perturbed = image.detach().clone()
-
+    # perform untargeted attack
     if not targeted:
-        # perform untargeted attack
         perturbed += eps * grad.sign()
 
+    # perform targeted attack
     else:
-        # perform targeted attack
         perturbed -= eps * grad.sign()
 
     # restore param gradients

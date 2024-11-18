@@ -1,6 +1,11 @@
 '''Adversarial ML tools.'''
 
-from . import fgsm
+from . import attacks
 
-from .fgsm import fgsm_attack, FGSMAttack
+from .attacks import (
+    fgsm_attack,
+    pgd_attack,
+    FGSMAttack,
+    PGDAttack
+)
 
