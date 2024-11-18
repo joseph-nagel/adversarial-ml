@@ -3,9 +3,10 @@
 from . import attacks
 
 from .attacks import (
-    fgsm_attack,
-    pgd_attack,
+    AdversarialAttack,
     FGSMAttack,
-    PGDAttack
+    PGDAttack,
+    fgsm_attack,
+    pgd_attack
 )
 

@@ -5,20 +5,11 @@ from collections.abc import Callable, Sequence
 import torch
 import torch.nn as nn
 
+from .base import AdversarialAttack
 
-class FGSMAttack(nn.Module):
+
+class FGSMAttack(AdversarialAttack):
     '''Fast gradient-sign attack.'''
-
-    def __init__(
-        self,
-        model: nn.Module,
-        criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor]
-    ) -> None:
-
-        super().__init__()
-
-        self.model = model
-        self.criterion = criterion
 
     def forward(
         self,

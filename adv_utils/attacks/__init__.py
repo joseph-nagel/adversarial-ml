@@ -1,6 +1,8 @@
 '''Adversarial attacks.'''
 
-from . import fgsm, pgd
+from . import base, fgsm, pgd
+
+from .base import AdversarialAttack
 
 from .fgsm import fgsm_attack, FGSMAttack
 

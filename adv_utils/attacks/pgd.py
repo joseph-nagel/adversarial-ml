@@ -5,20 +5,11 @@ from collections.abc import Callable, Sequence
 import torch
 import torch.nn as nn
 
+from .base import AdversarialAttack
 
-class PGDAttack(nn.Module):
+
+class PGDAttack(AdversarialAttack):
     '''Projected gradient descent attack.'''
-
-    def __init__(
-        self,
-        model: nn.Module,
-        criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor]
-    ) -> None:
-
-        super().__init__()
-
-        self.model = model
-        self.criterion = criterion
 
     def forward(
         self,
