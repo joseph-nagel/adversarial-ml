@@ -1,6 +1,6 @@
 '''Adversarial ML tools.'''
 
-from . import attacks, utils
+from . import attacks, hugging, utils
 
 from .attacks import (
     AdversarialAttack,
@@ -9,6 +9,8 @@ from .attacks import (
     fgsm_attack,
     pgd_attack
 )
+
+from .hugging import HFClassifier
 
 from .utils import download_file
 

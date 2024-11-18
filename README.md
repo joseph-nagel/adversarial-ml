@@ -7,5 +7,7 @@ This repository contains an exploration of adversarial attacks and defenses.
 
 - [Introduction](notebooks/intro.ipynb)
 
-- [Adversarial attacks](notebooks/attacks.ipynb)
+- [Adversarial attacks (PyTorch)](notebooks/attacks_pt.ipynb)
+
+- [Adversarial attacks (Hugging Face)](notebooks/attacks_hf.ipynb)
 
