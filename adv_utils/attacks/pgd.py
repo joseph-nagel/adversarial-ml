@@ -11,15 +11,29 @@ from .base import AdversarialAttack
 class PGDAttack(AdversarialAttack):
     '''Projected gradient descent attack.'''
 
-    def forward(
+    def __init__(
         self,
-        image: torch.Tensor,
-        label: torch.Tensor,
+        model: nn.Module,
+        criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
         num_steps: int,
         step_size: float,
         eps: float,
         p_norm: int | float = torch.inf,
         targeted: bool = False
+    ) -> None:
+
+        super().__init__(model, criterion)
+
+        self.num_steps = abs(num_steps)
+        self.step_size = abs(step_size)
+        self.eps = abs(eps)
+        self.p_norm = p_norm
+        self.targeted = targeted
+
+    def forward(
+        self,
+        image: torch.Tensor,
+        label: torch.Tensor
     ) -> torch.Tensor:
 
         return pgd_attack(
@@ -27,11 +41,11 @@ class PGDAttack(AdversarialAttack):
             criterion=self.criterion,
             image=image,
             label=label,
-            num_steps=num_steps,
-            step_size=step_size,
-            eps=eps,
-            p_norm=p_norm,
-            targeted=targeted
+            num_steps=self.num_steps,
+            step_size=self.step_size,
+            eps=self.eps,
+            p_norm=self.p_norm,
+            targeted=self.targeted
         )
 
 
