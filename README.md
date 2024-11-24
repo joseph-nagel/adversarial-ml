@@ -11,6 +11,8 @@ This repository contains an exploration of adversarial attacks and defenses.
 
 - [Adversarial attacks (Hugging Face)](notebooks/adv_attacks_hf.ipynb)
 
+- [Adversarial training](notebooks/adv_train.ipynb)
+
 
 ## Installation
 
