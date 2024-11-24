@@ -101,6 +101,7 @@ class AdversarialHFClassifier(AdversarialTraining):
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:
         '''Compute adversarial loss.'''
 
+        # perform attack (with gradients enabled)
         with torch.enable_grad():
             x_adv = self.attack(x, y)
 
@@ -151,13 +152,13 @@ class AdversarialHFClassifier(AdversarialTraining):
 
         if hasattr(self, 'std_train_acc') and std_pred is not None:
             _ = self.std_train_acc(std_pred, y_batch)
-            self.log('acc_train_std', self.std_train_acc)
+            self.log('std_train_acc', self.std_train_acc)
 
         if hasattr(self, 'adv_train_acc') and adv_pred is not None:
             _ = self.adv_train_acc(adv_pred, y_batch)
-            self.log('acc_train_adv', self.adv_train_acc)
+            self.log('adv_train_acc', self.adv_train_acc)
 
-        self.log('loss_train', loss.item()) # Lightning logs batch-wise scalars during training per default
+        self.log('train_loss', loss.item()) # Lightning logs batch-wise scalars during training per default
 
         return loss
 
@@ -172,13 +173,13 @@ class AdversarialHFClassifier(AdversarialTraining):
 
         if hasattr(self, 'std_val_acc') and std_pred is not None:
             _ = self.std_val_acc(std_pred, y_batch)
-            self.log('acc_val_std', self.std_val_acc)
+            self.log('std_val_acc', self.std_val_acc)
 
         if hasattr(self, 'adv_val_acc') and adv_pred is not None:
             _ = self.adv_val_acc(adv_pred, y_batch)
-            self.log('acc_val_adv', self.adv_val_acc)
+            self.log('adv_val_acc', self.adv_val_acc)
 
-        self.log('loss_val', loss.item()) # Lightning automatically averages scalars over batches for validation
+        self.log('val_loss', loss.item()) # Lightning automatically averages scalars over batches for validation
 
         return loss
 
@@ -193,13 +194,13 @@ class AdversarialHFClassifier(AdversarialTraining):
 
         if hasattr(self, 'std_test_acc') and std_pred is not None:
             _ = self.std_test_acc(std_pred, y_batch)
-            self.log('acc_test_std', self.std_test_acc)
+            self.log('std_test_acc', self.std_test_acc)
 
         if hasattr(self, 'adv_test_acc') and adv_pred is not None:
             _ = self.adv_test_acc(adv_pred, y_batch)
-            self.log('acc_test_adv', self.adv_test_acc)
+            self.log('adv_test_acc', self.adv_test_acc)
 
-        self.log('loss_test', loss.item()) # Lightning automatically averages scalars over batches for testing
+        self.log('test_loss', loss.item()) # Lightning automatically averages scalars over batches for testing
 
         return loss
 

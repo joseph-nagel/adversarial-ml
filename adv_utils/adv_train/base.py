@@ -79,8 +79,11 @@ class AdversarialTraining(LightningModule):
 
     def adversarial_loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         '''Compute adversarial loss.'''
+
+        # perform attack (with gradients enabled)
         with torch.enable_grad():
             x_adv = self.attack(x, y)
+
         return self.standard_loss(x_adv, y)
 
     def loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
@@ -122,7 +125,7 @@ class AdversarialTraining(LightningModule):
         x_batch, y_batch = self._get_batch(batch)
         loss = self.loss(x_batch, y_batch)
 
-        self.log('loss_train', loss.item()) # Lightning logs batch-wise scalars during training per default
+        self.log('train_loss', loss.item()) # Lightning logs batch-wise scalars during training per default
 
         return loss
 
@@ -135,7 +138,7 @@ class AdversarialTraining(LightningModule):
         x_batch, y_batch = self._get_batch(batch)
         loss = self.loss(x_batch, y_batch)
 
-        self.log('loss_val', loss.item()) # Lightning automatically averages scalars over batches for validation
+        self.log('val_loss', loss.item()) # Lightning automatically averages scalars over batches for validation
 
         return loss
 
@@ -148,7 +151,7 @@ class AdversarialTraining(LightningModule):
         x_batch, y_batch = self._get_batch(batch)
         loss = self.loss(x_batch, y_batch)
 
-        self.log('loss_test', loss.item()) # Lightning automatically averages scalars over batches for testing
+        self.log('test_loss', loss.item()) # Lightning automatically averages scalars over batches for testing
 
         return loss
 
