@@ -1,8 +1,9 @@
 numpy
 torch
 torchvision
+lightning
+tensorboard
 transformers
-adversarial-robustness-toolbox
 matplotlib
 notebook
 

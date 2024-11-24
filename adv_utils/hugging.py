@@ -1,6 +1,6 @@
 '''Hugging Face model wrappers.'''
 
-from typing import Self
+from typing import Self, Any
 
 import torch
 import torch.nn as nn
@@ -19,8 +19,10 @@ class HFClassifier(nn.Module):
         return self.model.config.id2label
 
     @classmethod
-    def from_pretrained(cls, model_name: str) -> Self:
-        model = AutoModelForImageClassification(model_name)
+    def from_pretrained(cls, model_name: str, **kwargs: Any) -> Self:
+        model = AutoModelForImageClassification.from_pretrained(
+            model_name, **kwargs
+        )
         return cls(model)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

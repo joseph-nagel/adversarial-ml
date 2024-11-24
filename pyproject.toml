@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["adv_utils"]
+
+[project]
+name = "adv-utils"
+version = "0.0.1"
+description = "Adversarial machine learning with PyTorch"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Joseph Nagel", email = "JosephBNagel@gmail.com"}
+]
+keywords = ["adversarial ML", "adversarial attacks", "adversarial training"]
+dependencies = [
+    "numpy",
+    "torch",
+    "torchvision",
+    "lightning",
+    "tensorboard",
+    "transformers"
+]
+
+[project.optional-dependencies]
+interactive = [
+    "matplotlib",
+    "notebook"
+]
+
+[project.urls]
+source = "https://github.com/joseph-nagel/adversarial-ml"
+

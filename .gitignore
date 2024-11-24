@@ -4,3 +4,8 @@ __pycache__/
 *.jpg
 *.jpeg
 
+*.egg-info/
+
+run/
+lightning_logs/
+
