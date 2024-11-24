@@ -7,9 +7,9 @@ This repository contains an exploration of adversarial attacks and defenses.
 
 - [Introduction](notebooks/intro.ipynb)
 
-- [Adversarial attacks (PyTorch)](notebooks/attacks_pt.ipynb)
+- [Adversarial attacks (PyTorch)](notebooks/adv_attacks_pt.ipynb)
 
-- [Adversarial attacks (Hugging Face)](notebooks/attacks_hf.ipynb)
+- [Adversarial attacks (Hugging Face)](notebooks/adv_attacks_hf.ipynb)
 
 
 ## Installation
@@ -22,10 +22,10 @@ pip install -e .
 ## Training
 
 ```
-python scripts/main.py fit --config config/train_std.yaml
+python scripts/main.py fit --config config/std_train.yaml
 ```
 
 ```
-python scripts/main.py fit --config config/train_adv.yaml
+python scripts/main.py fit --config config/adv_train.yaml
 ```
 

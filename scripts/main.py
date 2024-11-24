@@ -3,7 +3,7 @@ Training script.
 
 Example
 -------
-python scripts/main.py fit --config config/train_adv.yaml
+python scripts/main.py fit --config config/adv_train.yaml
 
 '''
 
