@@ -19,6 +19,7 @@ class AdversarialHFClassifier(AdversarialTraining):
         model_name: str = 'google/vit-base-patch16-224',
         data_dir: str | None = None,
         num_labels: int = 10,
+        freeze_features: bool = False,
         eps: float = 0.003,
         targeted: bool = False,
         alpha: float = 0.5,
@@ -34,11 +35,16 @@ class AdversarialHFClassifier(AdversarialTraining):
         )
 
         # freeze/unfreeze parameters
-        # for p in model.parameters():
-        #     p.requires_grad = False
+        if freeze_features:
+            for p in model.parameters():
+                p.requires_grad = False
 
-        # for p in model.model.classifier.parameters():
-        #     p.requires_grad = True
+            for p in model.model.classifier.parameters():
+                p.requires_grad = True
+
+        else:
+            for p in model.parameters():
+                p.requires_grad = True
 
         # create criterion
         criterion = nn.CrossEntropyLoss(reduction='mean')

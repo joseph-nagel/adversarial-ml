@@ -17,6 +17,7 @@ model:
     model_name: "microsoft/resnet-18"
     data_dir: "run/data/"
     num_labels: 102
+    freeze_features: false
     eps: 0.003
     targeted: false
     alpha: 0.5
