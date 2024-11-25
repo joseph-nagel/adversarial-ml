@@ -22,7 +22,8 @@ dependencies = [
     "torchvision",
     "lightning",
     "tensorboard",
-    "transformers"
+    "transformers",
+    "adversarial-robustness-toolbox"
 ]
 
 [project.optional-dependencies]
