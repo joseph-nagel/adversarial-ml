@@ -3,6 +3,12 @@
 This repository contains an exploration of adversarial attacks and defenses.
 
 
+<p>
+  <img src="assets/original.png" alt="The original image is correctly classified as a volcano" title="Original image before the attack" height="250" style="padding-right: 1em;">
+  <img src="assets/attacked.png" alt="The attacked image is misclassified as a goldfish" title="Perturbed image after the (targeted PGD) attack" height="250">
+</p>
+
+
 ## Notebooks
 
 - [Introduction](notebooks/intro.ipynb)
