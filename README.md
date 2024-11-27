@@ -12,8 +12,8 @@ It provides a unified NumPy-based API for adversarial ML that,
 under the hood, supports all major deep learning frameworks.
 
 <p>
-  <img src="assets/original.png" alt="The original image is correctly classified as a volcano" title="Original image before the attack" height="250" style="padding-right: 1em;">
-  <img src="assets/attacked.png" alt="The attacked image is misclassified as a goldfish" title="Imperceptibly perturbed image after the (targeted PGD) attack" height="250">
+  <img src="assets/original.png" alt="The original image is correctly classified as a volcano" title="Original image before the attack" height="300" style="padding-right: 1em;">
+  <img src="assets/attacked.png" alt="The attacked image is misclassified as a goldfish" title="Imperceptibly perturbed image after the (targeted PGD) attack" height="300">
 </p>
 
 
