@@ -8,38 +8,6 @@ import torch.nn as nn
 from .base import AdversarialAttack
 
 
-class FGSMAttack(AdversarialAttack):
-    '''Fast gradient-sign attack.'''
-
-    def __init__(
-        self,
-        model: nn.Module,
-        criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
-        eps: float,
-        targeted: bool = False
-    ) -> None:
-
-        super().__init__(model, criterion)
-
-        self.eps = abs(eps)
-        self.targeted = targeted
-
-    def forward(
-        self,
-        image: torch.Tensor,
-        label: torch.Tensor
-    ) -> torch.Tensor:
-
-        return fgsm_attack(
-            model=self.model,
-            criterion=self.criterion,
-            image=image,
-            label=label,
-            eps=self.eps,
-            targeted=self.targeted
-        )
-
-
 def fgsm_attack(
     model: nn.Module,
     criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
@@ -89,4 +57,36 @@ def fgsm_attack(
         p.requires_grad = p_requires_grad
 
     return perturbed
+
+
+class FGSMAttack(AdversarialAttack):
+    '''Fast gradient-sign attack.'''
+
+    def __init__(
+        self,
+        model: nn.Module,
+        criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
+        eps: float,
+        targeted: bool = False
+    ) -> None:
+
+        super().__init__(model, criterion)
+
+        self.eps = abs(eps)
+        self.targeted = targeted
+
+    def forward(
+        self,
+        image: torch.Tensor,
+        label: torch.Tensor
+    ) -> torch.Tensor:
+
+        return fgsm_attack(
+            model=self.model,
+            criterion=self.criterion,
+            image=image,
+            label=label,
+            eps=self.eps,
+            targeted=self.targeted
+        )
 
