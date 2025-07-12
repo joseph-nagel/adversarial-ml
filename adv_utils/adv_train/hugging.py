@@ -158,7 +158,7 @@ class AdversarialHFClassifier(AdversarialTraining):
             _ = self.adv_train_acc(adv_pred, y_batch)
             self.log('adv_train_acc', self.adv_train_acc)
 
-        self.log('train_loss', loss.item()) # Lightning logs batch-wise scalars during training per default
+        self.log('train_loss', loss.item())  # Lightning logs batch-wise scalars during training per default
 
         return loss
 
@@ -179,7 +179,7 @@ class AdversarialHFClassifier(AdversarialTraining):
             _ = self.adv_val_acc(adv_pred, y_batch)
             self.log('adv_val_acc', self.adv_val_acc)
 
-        self.log('val_loss', loss.item()) # Lightning automatically averages scalars over batches for validation
+        self.log('val_loss', loss.item())  # Lightning automatically averages scalars over batches for validation
 
         return loss
 
@@ -200,7 +200,7 @@ class AdversarialHFClassifier(AdversarialTraining):
             _ = self.adv_test_acc(adv_pred, y_batch)
             self.log('adv_test_acc', self.adv_test_acc)
 
-        self.log('test_loss', loss.item()) # Lightning automatically averages scalars over batches for testing
+        self.log('test_loss', loss.item())  # Lightning automatically averages scalars over batches for testing
 
         return loss
 

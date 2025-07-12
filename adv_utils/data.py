@@ -49,7 +49,7 @@ class Flowers102DataModule(LightningDataModule):
 
         # create transforms
         train_transforms = [
-            transforms.RandomRotation(45), # TODO: refine data augmentation
+            transforms.RandomRotation(45),  # TODO: refine data augmentation
             transforms.RandomHorizontalFlip(),
             transforms.RandomResizedCrop((224, 224)),
             transforms.ToTensor()
@@ -76,8 +76,8 @@ class Flowers102DataModule(LightningDataModule):
             std = torch.as_tensor(std).view(-1, 1, 1)
 
             self.renormalize = transforms.Compose([
-                transforms.Lambda(lambda x: x * std + mean), # reverse normalization
-                transforms.Lambda(lambda x: x.clamp(0, 1)) # clip to valid range
+                transforms.Lambda(lambda x: x * std + mean),  # reverse normalization
+                transforms.Lambda(lambda x: x.clamp(0, 1))  # clip to valid range
             ])
 
     def prepare_data(self) -> None:

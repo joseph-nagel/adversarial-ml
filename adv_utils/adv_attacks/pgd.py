@@ -30,7 +30,7 @@ def _initialize(
             dtype=perturbed.dtype
         ) # (b, 3*h*w)
 
-        small_shifts = small_shifts.view(*perturbed.shape) # (b, 3, h, w)
+        small_shifts = small_shifts.view(*perturbed.shape)  # (b, 3, h, w)
 
     # generate uniform box samples
     elif p_norm == torch.inf:
@@ -39,7 +39,7 @@ def _initialize(
             size=perturbed.shape,
             interval=(-eps, eps),
             dtype=perturbed.dtype
-        ) # (b, 3, h, w),
+        )  # (b, 3, h, w),
 
     else:
         raise ValueError(f'Unsupported p-norm: {p_norm}')
@@ -60,21 +60,21 @@ def _project(
 
     # rescale (if outside of l2-ball)
     if p_norm == 2:
-        delta = perturbed - image # (b, 3, h, w)
+        delta = perturbed - image  # (b, 3, h, w)
 
         norm = torch.linalg.vector_norm(
             delta,
             dim=tuple(range(1, perturbed.ndim)),
             keepdim=True
-        ) # (b, 1, 1, 1)
+        )  # (b, 1, 1, 1)
 
-        delta = torch.where(norm > eps, delta / norm, delta) # (b, 3, h, w)
+        delta = torch.where(norm > eps, delta / norm, delta)  # (b, 3, h, w)
 
-        perturbed = image + delta # (b, 3, h, w)
+        perturbed = image + delta  # (b, 3, h, w)
 
     # clip (each dimension)
     elif p_norm == torch.inf:
-        perturbed = perturbed.clamp(image - eps, image + eps) # (b, 3, h, w)
+        perturbed = perturbed.clamp(image - eps, image + eps)  # (b, 3, h, w)
 
     else:
         raise ValueError(f'Unsupported p-norm: {p_norm}')
