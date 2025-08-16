@@ -15,7 +15,7 @@ class Flowers102DataModule(LightningDataModule):
     DataModule for the Flowers102 dataset.
 
     Parameters
-    ----------.
+    ----------
     data_dir : str
         Directory for storing the data.
     mean : float, (float, float, float) or None
