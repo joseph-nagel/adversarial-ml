@@ -203,4 +203,3 @@ class AdversarialHFClassifier(AdversarialTraining):
         self.log('test_loss', loss.item())  # Lightning automatically averages scalars over batches for testing
 
         return loss
-

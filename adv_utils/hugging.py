@@ -28,4 +28,3 @@ class HFClassifier(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         outputs = self.model(x)
         return outputs['logits']
-

@@ -170,4 +170,3 @@ class Flowers102DataModule(LightningDataModule):
             )
         else:
             raise AttributeError('Test set has not been set')
-

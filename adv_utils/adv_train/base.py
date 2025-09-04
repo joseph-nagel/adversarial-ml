@@ -159,4 +159,3 @@ class AdversarialTraining(LightningModule):
     def configure_optimizers(self) -> torch.optim.Optimizer:
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         return optimizer
-

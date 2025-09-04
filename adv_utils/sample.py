@@ -109,4 +109,3 @@ def sample_ball(
     samples_in_ball *= radius
 
     return samples_in_ball.squeeze()
-

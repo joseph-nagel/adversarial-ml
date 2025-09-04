@@ -89,4 +89,3 @@ class FGSMAttack(AdversarialAttack):
             eps=self.eps,
             targeted=self.targeted
         )
-

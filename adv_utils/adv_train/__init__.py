@@ -13,4 +13,3 @@ from . import base, hugging
 from .base import AdversarialTraining
 
 from .hugging import AdversarialHFClassifier
-

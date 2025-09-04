@@ -34,4 +34,3 @@ interactive = [
 
 [project.urls]
 source = "https://github.com/joseph-nagel/adversarial-ml"
-

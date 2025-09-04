@@ -24,4 +24,3 @@ class AdversarialAttack(nn.Module, ABC):
     @abstractmethod
     def forward(self):
         raise NotImplementedError
-

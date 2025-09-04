@@ -202,4 +202,3 @@ class PGDAttack(AdversarialAttack):
             targeted=self.targeted,
             random_init=self.random_init
         )
-
