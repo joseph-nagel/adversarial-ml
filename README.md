@@ -28,17 +28,17 @@ under the hood, supports all major deep learning frameworks.
 
 ## Installation
 
-```
+```bash
 pip install -e .
 ```
 
 
 ## Training
 
-```
+```bash
 python scripts/main.py fit --config config/std_train.yaml
 ```
 
-```
+```bash
 python scripts/main.py fit --config config/adv_train.yaml
 ```
