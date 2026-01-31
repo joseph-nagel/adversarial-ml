@@ -68,8 +68,7 @@ class FGSMAttack(AdversarialAttack):
         criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
         eps: float,
         targeted: bool = False
-    ) -> None:
-
+    ):
         super().__init__(model, criterion)
 
         self.eps = abs(eps)

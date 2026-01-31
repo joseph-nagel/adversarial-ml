@@ -24,7 +24,7 @@ class AdversarialHFClassifier(AdversarialTraining):
         targeted: bool = False,
         alpha: float = 0.5,
         lr: float = 1e-04
-    ) -> None:
+    ):
 
         # load pretrained model
         model = HFClassifier.from_pretrained(
@@ -84,7 +84,6 @@ class AdversarialHFClassifier(AdversarialTraining):
         return_pred: bool = False
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:
         '''Compute standard loss.'''
-
         y_pred = self.model(x)
         loss = self.criterion(y_pred, y)
 
@@ -100,11 +99,9 @@ class AdversarialHFClassifier(AdversarialTraining):
         return_pred: bool = False
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:
         '''Compute adversarial loss.'''
-
         # perform attack (with gradients enabled)
         with torch.enable_grad():
             x_adv = self.attack(x, y)
-
         return self.standard_loss(x_adv, y, return_pred)
 
     def loss(
@@ -146,7 +143,6 @@ class AdversarialHFClassifier(AdversarialTraining):
         batch: Sequence[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
         batch_idx: int
     ) -> torch.Tensor:
-
         x_batch, y_batch = self._get_batch(batch)
         loss, std_pred, adv_pred = self.loss(x_batch, y_batch, return_pred=True)
 
@@ -159,7 +155,6 @@ class AdversarialHFClassifier(AdversarialTraining):
             self.log('adv_train_acc', self.adv_train_acc)
 
         self.log('train_loss', loss.item())  # Lightning logs batch-wise scalars during training per default
-
         return loss
 
     def validation_step(
@@ -167,7 +162,6 @@ class AdversarialHFClassifier(AdversarialTraining):
         batch: Sequence[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
         batch_idx: int
     ) -> torch.Tensor:
-
         x_batch, y_batch = self._get_batch(batch)
         loss, std_pred, adv_pred = self.loss(x_batch, y_batch, return_pred=True)
 
@@ -180,7 +174,6 @@ class AdversarialHFClassifier(AdversarialTraining):
             self.log('adv_val_acc', self.adv_val_acc)
 
         self.log('val_loss', loss.item())  # Lightning automatically averages scalars over batches for validation
-
         return loss
 
     def test_step(
@@ -188,7 +181,6 @@ class AdversarialHFClassifier(AdversarialTraining):
         batch: Sequence[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
         batch_idx: int
     ) -> torch.Tensor:
-
         x_batch, y_batch = self._get_batch(batch)
         loss, std_pred, adv_pred = self.loss(x_batch, y_batch, return_pred=True)
 
@@ -201,5 +193,4 @@ class AdversarialHFClassifier(AdversarialTraining):
             self.log('adv_test_acc', self.adv_test_acc)
 
         self.log('test_loss', loss.item())  # Lightning automatically averages scalars over batches for testing
-
         return loss

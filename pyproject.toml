@@ -23,11 +23,7 @@ dependencies = [
     "lightning",
     "tensorboard",
     "transformers",
-    "adversarial-robustness-toolbox"
-]
-
-[project.optional-dependencies]
-interactive = [
+    "adversarial-robustness-toolbox",
     "matplotlib",
     "notebook"
 ]

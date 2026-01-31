@@ -6,7 +6,6 @@ from torchvision import datasets, transforms
 from lightning import LightningDataModule
 
 
-# define type alias
 FloatOrFloats = float | tuple[float, float, float]
 
 
@@ -36,8 +35,7 @@ class Flowers102DataModule(LightningDataModule):
         std: FloatOrFloats | None = (0.5, 0.5, 0.5),
         batch_size: int = 32,
         num_workers: int = 0
-    ) -> None:
-
+    ):
         super().__init__()
 
         # set data location
@@ -82,19 +80,16 @@ class Flowers102DataModule(LightningDataModule):
 
     def prepare_data(self) -> None:
         '''Download data.'''
-
         train_set = datasets.Flowers102(
             self.data_dir,
             split='train',
             download=True
         )
-
         val_set = datasets.Flowers102(
             self.data_dir,
             split='val',
             download=True
         )
-
         test_set = datasets.Flowers102(
             self.data_dir,
             split='test',
@@ -103,7 +98,6 @@ class Flowers102DataModule(LightningDataModule):
 
     def setup(self, stage: str) -> None:
         '''Set up train/test/val. datasets.'''
-
         # create train/val. datasets
         if stage in ('fit', 'validate'):
             self.train_set = datasets.Flowers102(
@@ -117,7 +111,6 @@ class Flowers102DataModule(LightningDataModule):
                 split='val',
                 transform=self.train_transform
             )
-
         # create test dataset
         elif stage == 'test':
             self.test_set = datasets.Flowers102(
@@ -128,7 +121,6 @@ class Flowers102DataModule(LightningDataModule):
 
     def train_dataloader(self) -> DataLoader:
         '''Create train dataloader.'''
-
         if hasattr(self, 'train_set'):
             return DataLoader(
                 self.train_set,
@@ -143,7 +135,6 @@ class Flowers102DataModule(LightningDataModule):
 
     def val_dataloader(self) -> DataLoader:
         '''Create val. dataloader.'''
-
         if hasattr(self, 'val_set'):
             return DataLoader(
                 self.val_set,
@@ -158,7 +149,6 @@ class Flowers102DataModule(LightningDataModule):
 
     def test_dataloader(self) -> DataLoader:
         '''Create test dataloader.'''
-
         if hasattr(self, 'test_set'):
             return DataLoader(
                 self.test_set,

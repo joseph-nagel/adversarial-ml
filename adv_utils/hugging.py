@@ -10,7 +10,7 @@ from transformers import AutoModelForImageClassification
 class HFClassifier(nn.Module):
     '''Hugging Face classifier.'''
 
-    def __init__(self, model: nn.Module) -> None:
+    def __init__(self, model: nn.Module):
         super().__init__()
         self.model = model
 

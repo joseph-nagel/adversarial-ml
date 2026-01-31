@@ -14,8 +14,7 @@ class AdversarialAttack(nn.Module, ABC):
         self,
         model: nn.Module,
         criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor]
-    ) -> None:
-
+    ):
         super().__init__()
 
         self.model = model
@@ -23,4 +22,4 @@ class AdversarialAttack(nn.Module, ABC):
 
     @abstractmethod
     def forward(self):
-        raise NotImplementedError
+        raise NotImplementedError()

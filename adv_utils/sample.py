@@ -17,7 +17,7 @@ def sample_interval(
         raise TypeError(f'Invalid interval type: {type(interval)}')
 
     elif len(interval) != 2:
-        raise ValueError(f'Invalued number of elements: {len(interval)}')
+        raise ValueError(f'Invalid number of elements: {len(interval)}')
 
     lower = min(interval)
     upper = max(interval)

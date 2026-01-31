@@ -173,8 +173,7 @@ class PGDAttack(AdversarialAttack):
         p_norm: int | float = torch.inf,
         targeted: bool = False,
         random_init: bool = False
-    ) -> None:
-
+    ):
         super().__init__(model, criterion)
 
         self.num_steps = abs(num_steps)
