@@ -22,19 +22,17 @@ def _initialize(
 
     # generate uniform ball samples
     if p_norm == 2:
-
         small_shifts = sample_ball(
             num_samples=perturbed.shape[0],
             num_dim=prod(perturbed.shape[1:]),
             radius=eps,
             dtype=perturbed.dtype
-        ) # (b, 3*h*w)
+        )  # (b, 3*h*w)
 
         small_shifts = small_shifts.view(*perturbed.shape)  # (b, 3, h, w)
 
     # generate uniform box samples
     elif p_norm == torch.inf:
-
         small_shifts = sample_interval(
             size=perturbed.shape,
             interval=(-eps, eps),
