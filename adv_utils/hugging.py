@@ -1,4 +1,4 @@
-'''Hugging Face model wrappers.'''
+"""Hugging Face model wrappers."""
 
 from typing import Self, Any
 
@@ -8,7 +8,7 @@ from transformers import AutoModelForImageClassification
 
 
 class HFClassifier(nn.Module):
-    '''Hugging Face classifier.'''
+    """Hugging Face classifier."""
 
     def __init__(self, model: nn.Module):
         super().__init__()
@@ -20,11 +20,9 @@ class HFClassifier(nn.Module):
 
     @classmethod
     def from_pretrained(cls, model_name: str, **kwargs: Any) -> Self:
-        model = AutoModelForImageClassification.from_pretrained(
-            model_name, **kwargs
-        )
+        model = AutoModelForImageClassification.from_pretrained(model_name, **kwargs)
         return cls(model)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         outputs = self.model(x)
-        return outputs['logits']
+        return outputs["logits"]

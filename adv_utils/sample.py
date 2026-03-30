@@ -1,4 +1,4 @@
-'''Random sampling.'''
+"""Random sampling."""
 
 from collections.abc import Sequence
 
@@ -7,17 +7,17 @@ import torch
 
 def sample_interval(
     size: int | Sequence[int],
-    interval: tuple[float, float] = (0., 1.),
-    dtype: torch.dtype | None = None
-):
-    '''Sample uniformly over an interval.'''
+    interval: tuple[float, float] = (0.0, 1.0),
+    dtype: torch.dtype | None = None,
+) -> torch.Tensor:
+    """Sample uniformly over an interval."""
 
     # get lower/upper bound
     if not isinstance(interval, Sequence):
-        raise TypeError(f'Invalid interval type: {type(interval)}')
+        raise TypeError(f"Invalid interval type: {type(interval)}")
 
     elif len(interval) != 2:
-        raise ValueError(f'Invalid number of elements: {len(interval)}')
+        raise ValueError(f"Invalid number of elements: {len(interval)}")
 
     lower = min(interval)
     upper = max(interval)
@@ -34,10 +34,10 @@ def sample_interval(
 def sample_sphere(
     num_samples: int,
     num_dim: int = 3,
-    radius: float = 1.,
-    dtype: torch.dtype | None = None
+    radius: float = 1.0,
+    dtype: torch.dtype | None = None,
 ) -> torch.Tensor:
-    '''
+    """
     Sample uniformly on an (n-1)-sphere.
 
     Parameters
@@ -51,7 +51,7 @@ def sample_sphere(
     dtype : torch.dtype or None
         Data type.
 
-    '''
+    """
 
     # generate standard normal samples
     samples = torch.randn((num_samples, num_dim), dtype=dtype)
@@ -72,10 +72,10 @@ def sample_sphere(
 def sample_ball(
     num_samples: int,
     num_dim: int = 3,
-    radius: float = 1.,
-    dtype: torch.dtype | None = None
+    radius: float = 1.0,
+    dtype: torch.dtype | None = None,
 ) -> torch.Tensor:
-    '''
+    """
     Sample uniformly within an n-ball.
 
     Parameters
@@ -89,14 +89,14 @@ def sample_ball(
     dtype : torch.dtype or None
         Data type.
 
-    '''
+    """
 
     # sample uniformly on the unit sphere
     samples_on_sphere = sample_sphere(
         num_samples,
         num_dim=num_dim,
-        radius=1.,
-        dtype=dtype
+        radius=1.0,
+        dtype=dtype,
     )
 
     # sample uniformly in [0, 1]

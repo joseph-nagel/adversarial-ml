@@ -1,4 +1,4 @@
-'''Projected gradient descent.'''
+"""Projected gradient descent."""
 
 from collections.abc import Callable, Sequence
 from math import prod
@@ -10,12 +10,8 @@ from ..sample import sample_interval, sample_ball
 from .base import AdversarialAttack
 
 
-def _initialize(
-    image: torch.Tensor,
-    eps: float,
-    p_norm: int | float = torch.inf
-):
-    '''Create random initializations.'''
+def _initialize(image: torch.Tensor, eps: float, p_norm: int | float = torch.inf):
+    """Create random initializations."""
 
     # copy tensor
     perturbed = torch.as_tensor(image).detach().clone()
@@ -26,7 +22,7 @@ def _initialize(
             num_samples=perturbed.shape[0],
             num_dim=prod(perturbed.shape[1:]),
             radius=eps,
-            dtype=perturbed.dtype
+            dtype=perturbed.dtype,
         )  # (b, 3*h*w)
 
         small_shifts = small_shifts.view(*perturbed.shape)  # (b, 3, h, w)
@@ -36,11 +32,11 @@ def _initialize(
         small_shifts = sample_interval(
             size=perturbed.shape,
             interval=(-eps, eps),
-            dtype=perturbed.dtype
+            dtype=perturbed.dtype,
         )  # (b, 3, h, w),
 
     else:
-        raise ValueError(f'Unsupported p-norm: {p_norm}')
+        raise ValueError(f"Unsupported p-norm: {p_norm}")
 
     # add random shifts
     perturbed += small_shifts
@@ -48,13 +44,8 @@ def _initialize(
     return perturbed
 
 
-def _project(
-    perturbed: torch.Tensor,
-    image: torch.Tensor,
-    eps: float,
-    p_norm: int | float = torch.inf
-):
-    '''Project to a neighborhood.'''
+def _project(perturbed: torch.Tensor, image: torch.Tensor, eps: float, p_norm: int | float = torch.inf):
+    """Project to a neighborhood."""
 
     # rescale (if outside of l2-ball)
     if p_norm == 2:
@@ -63,7 +54,7 @@ def _project(
         norm = torch.linalg.vector_norm(
             delta,
             dim=tuple(range(1, perturbed.ndim)),
-            keepdim=True
+            keepdim=True,
         )  # (b, 1, 1, 1)
 
         delta = torch.where(norm > eps, delta / norm, delta)  # (b, 3, h, w)
@@ -75,7 +66,7 @@ def _project(
         perturbed = perturbed.clamp(image - eps, image + eps)  # (b, 3, h, w)
 
     else:
-        raise ValueError(f'Unsupported p-norm: {p_norm}')
+        raise ValueError(f"Unsupported p-norm: {p_norm}")
 
     return perturbed
 
@@ -90,9 +81,9 @@ def pgd_attack(
     eps: float,
     p_norm: int | float = torch.inf,
     targeted: bool = False,
-    random_init: bool = False
+    random_init: bool = False,
 ) -> torch.Tensor:
-    '''Perform a projected gradient descent attack.'''
+    """Perform a projected gradient descent attack."""
 
     # ensure tensor inputs
     perturbed = torch.as_tensor(image).detach().clone()
@@ -109,19 +100,14 @@ def pgd_attack(
 
     # check p-norm
     if p_norm not in (2, torch.inf):
-        raise ValueError(f'Unsupported p-norm: {p_norm}')
+        raise ValueError(f"Unsupported p-norm: {p_norm}")
 
     # initialize
     if random_init:
-        perturbed = _initialize(
-            image=perturbed,
-            eps=eps,
-            p_norm=p_norm
-        )
+        perturbed = _initialize(image=perturbed, eps=eps, p_norm=p_norm)
 
     # perform iterations
     for _ in range(num_steps):
-
         # enable input gradients
         perturbed.requires_grad = True
 
@@ -148,7 +134,7 @@ def pgd_attack(
             perturbed=perturbed,
             image=image,
             eps=eps,
-            p_norm=p_norm
+            p_norm=p_norm,
         )
 
     # restore param gradients
@@ -159,7 +145,7 @@ def pgd_attack(
 
 
 class PGDAttack(AdversarialAttack):
-    '''Projected gradient descent attack.'''
+    """Projected gradient descent attack."""
 
     def __init__(
         self,
@@ -170,7 +156,7 @@ class PGDAttack(AdversarialAttack):
         eps: float,
         p_norm: int | float = torch.inf,
         targeted: bool = False,
-        random_init: bool = False
+        random_init: bool = False,
     ):
         super().__init__(model, criterion)
 
@@ -181,11 +167,7 @@ class PGDAttack(AdversarialAttack):
         self.targeted = targeted
         self.random_init = random_init
 
-    def forward(
-        self,
-        image: torch.Tensor,
-        label: torch.Tensor
-    ) -> torch.Tensor:
+    def forward(self, image: torch.Tensor, label: torch.Tensor) -> torch.Tensor:
 
         return pgd_attack(
             model=self.model,
@@ -197,5 +179,5 @@ class PGDAttack(AdversarialAttack):
             eps=self.eps,
             p_norm=self.p_norm,
             targeted=self.targeted,
-            random_init=self.random_init
+            random_init=self.random_init,
         )

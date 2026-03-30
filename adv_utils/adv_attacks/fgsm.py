@@ -1,4 +1,4 @@
-'''Fast-gradient sign method.'''
+"""Fast-gradient sign method."""
 
 from collections.abc import Callable, Sequence
 
@@ -14,9 +14,9 @@ def fgsm_attack(
     image: torch.Tensor,
     label: torch.Tensor | int | Sequence[int],
     eps: float,
-    targeted: bool = False
+    targeted: bool = False,
 ) -> torch.Tensor:
-    '''Perform a fast gradient-sign attack.'''
+    """Perform a fast gradient-sign attack."""
 
     # ensure tensor inputs
     perturbed = torch.as_tensor(image).detach().clone()
@@ -60,25 +60,21 @@ def fgsm_attack(
 
 
 class FGSMAttack(AdversarialAttack):
-    '''Fast gradient-sign attack.'''
+    """Fast gradient-sign attack."""
 
     def __init__(
         self,
         model: nn.Module,
         criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
         eps: float,
-        targeted: bool = False
+        targeted: bool = False,
     ):
         super().__init__(model, criterion)
 
         self.eps = abs(eps)
         self.targeted = targeted
 
-    def forward(
-        self,
-        image: torch.Tensor,
-        label: torch.Tensor
-    ) -> torch.Tensor:
+    def forward(self, image: torch.Tensor, label: torch.Tensor) -> torch.Tensor:
 
         return fgsm_attack(
             model=self.model,
@@ -86,5 +82,5 @@ class FGSMAttack(AdversarialAttack):
             image=image,
             label=label,
             eps=self.eps,
-            targeted=self.targeted
+            targeted=self.targeted,
         )

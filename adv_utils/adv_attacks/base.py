@@ -1,4 +1,4 @@
-'''Attack base class.'''
+"""Attack base class."""
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
@@ -8,12 +8,12 @@ import torch.nn as nn
 
 
 class AdversarialAttack(nn.Module, ABC):
-    '''Adversarial attack base class.'''
+    """Adversarial attack base class."""
 
     def __init__(
         self,
         model: nn.Module,
-        criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor]
+        criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
     ):
         super().__init__()
 

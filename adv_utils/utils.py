@@ -1,16 +1,16 @@
-'''Some utilities.'''
+"""Some utilities."""
 
 from urllib.request import urlretrieve
 
 
 def download_file(url, save_path):
-    '''Download and save file.'''
+    """Download and save file."""
     save_path, _ = urlretrieve(url, filename=save_path)
     return save_path
 
 
 def repeat_tensor(x, num_repeats, dim=0):
-    '''Repeat tensor along axis.'''
+    """Repeat tensor along axis."""
 
     # create view
     if x.shape[dim] == 1:

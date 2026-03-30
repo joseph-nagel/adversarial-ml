@@ -1,4 +1,4 @@
-'''Adv. classifier training.'''
+"""Adv. classifier training."""
 
 from collections.abc import Sequence
 
@@ -12,18 +12,18 @@ from .base import AdversarialTraining
 
 
 class AdversarialHFClassifier(AdversarialTraining):
-    '''Adv. training of a pretrained classifier.'''
+    """Adv. training of a pretrained classifier."""
 
     def __init__(
         self,
-        model_name: str = 'google/vit-base-patch16-224',
+        model_name: str = "google/vit-base-patch16-224",
         data_dir: str | None = None,
         num_labels: int = 10,
         freeze_features: bool = False,
         eps: float = 0.003,
         targeted: bool = False,
         alpha: float = 0.5,
-        lr: float = 1e-04
+        lr: float = 1e-04,
     ):
 
         # load pretrained model
@@ -31,7 +31,7 @@ class AdversarialHFClassifier(AdversarialTraining):
             model_name,
             cache_dir=data_dir,
             num_labels=num_labels,
-            ignore_mismatched_sizes=False if num_labels is None else True
+            ignore_mismatched_sizes=False if num_labels is None else True,
         )
 
         # freeze/unfreeze parameters
@@ -47,14 +47,14 @@ class AdversarialHFClassifier(AdversarialTraining):
                 p.requires_grad = True
 
         # create criterion
-        criterion = nn.CrossEntropyLoss(reduction='mean')
+        criterion = nn.CrossEntropyLoss(reduction="mean")
 
         # create attack
         attack = FGSMAttack(
             model=model,
             criterion=criterion,
             eps=eps,
-            targeted=targeted
+            targeted=targeted,
         )
 
         # initialize parent class
@@ -63,27 +63,27 @@ class AdversarialHFClassifier(AdversarialTraining):
             criterion=criterion,
             attack=attack,
             alpha=alpha,
-            lr=lr
+            lr=lr,
         )
 
         # create accuracy metrics
-        if self.std_weight > 0.:
-            self.std_train_acc = Accuracy(task='multiclass', num_classes=num_labels)
-            self.std_val_acc = Accuracy(task='multiclass', num_classes=num_labels)
-            self.std_test_acc = Accuracy(task='multiclass', num_classes=num_labels)
+        if self.std_weight > 0.0:
+            self.std_train_acc = Accuracy(task="multiclass", num_classes=num_labels)
+            self.std_val_acc = Accuracy(task="multiclass", num_classes=num_labels)
+            self.std_test_acc = Accuracy(task="multiclass", num_classes=num_labels)
 
-        if self.adv_weight > 0.:
-            self.adv_train_acc = Accuracy(task='multiclass', num_classes=num_labels)
-            self.adv_val_acc = Accuracy(task='multiclass', num_classes=num_labels)
-            self.adv_test_acc = Accuracy(task='multiclass', num_classes=num_labels)
+        if self.adv_weight > 0.0:
+            self.adv_train_acc = Accuracy(task="multiclass", num_classes=num_labels)
+            self.adv_val_acc = Accuracy(task="multiclass", num_classes=num_labels)
+            self.adv_test_acc = Accuracy(task="multiclass", num_classes=num_labels)
 
     def standard_loss(
         self,
         x: torch.Tensor,
         y: torch.Tensor,
-        return_pred: bool = False
+        return_pred: bool = False,
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:
-        '''Compute standard loss.'''
+        """Compute standard loss."""
         y_pred = self.model(x)
         loss = self.criterion(y_pred, y)
 
@@ -96,9 +96,9 @@ class AdversarialHFClassifier(AdversarialTraining):
         self,
         x: torch.Tensor,
         y: torch.Tensor,
-        return_pred: bool = False
+        return_pred: bool = False,
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:
-        '''Compute adversarial loss.'''
+        """Compute adversarial loss."""
         # perform attack (with gradients enabled)
         with torch.enable_grad():
             x_adv = self.attack(x, y)
@@ -108,12 +108,12 @@ class AdversarialHFClassifier(AdversarialTraining):
         self,
         x: torch.Tensor,
         y: torch.Tensor,
-        return_pred: bool = False
+        return_pred: bool = False,
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        '''Compute loss.'''
+        """Compute loss."""
 
         # compute standard loss
-        std_out = self.standard_loss(x, y, return_pred) if self.std_weight > 0. else 0.0
+        std_out = self.standard_loss(x, y, return_pred) if self.std_weight > 0.0 else 0.0
 
         if isinstance(std_out, tuple):
             std_loss, std_pred = std_out
@@ -122,7 +122,7 @@ class AdversarialHFClassifier(AdversarialTraining):
             std_pred = None
 
         # compute adversarial loss
-        adv_out = self.adversarial_loss(x, y, return_pred) if self.adv_weight > 0. else 0.0
+        adv_out = self.adversarial_loss(x, y, return_pred) if self.adv_weight > 0.0 else 0.0
 
         if isinstance(adv_out, tuple):
             adv_loss, adv_pred = adv_out
@@ -141,56 +141,56 @@ class AdversarialHFClassifier(AdversarialTraining):
     def training_step(
         self,
         batch: Sequence[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
-        batch_idx: int
+        batch_idx: int,
     ) -> torch.Tensor:
         x_batch, y_batch = self._get_batch(batch)
         loss, std_pred, adv_pred = self.loss(x_batch, y_batch, return_pred=True)
 
-        if hasattr(self, 'std_train_acc') and std_pred is not None:
+        if hasattr(self, "std_train_acc") and std_pred is not None:
             _ = self.std_train_acc(std_pred, y_batch)
-            self.log('std_train_acc', self.std_train_acc)
+            self.log("std_train_acc", self.std_train_acc)
 
-        if hasattr(self, 'adv_train_acc') and adv_pred is not None:
+        if hasattr(self, "adv_train_acc") and adv_pred is not None:
             _ = self.adv_train_acc(adv_pred, y_batch)
-            self.log('adv_train_acc', self.adv_train_acc)
+            self.log("adv_train_acc", self.adv_train_acc)
 
-        self.log('train_loss', loss.item())  # Lightning logs batch-wise scalars during training per default
+        self.log("train_loss", loss.item())  # Lightning logs batch-wise scalars during training per default
         return loss
 
     def validation_step(
         self,
         batch: Sequence[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
-        batch_idx: int
+        batch_idx: int,
     ) -> torch.Tensor:
         x_batch, y_batch = self._get_batch(batch)
         loss, std_pred, adv_pred = self.loss(x_batch, y_batch, return_pred=True)
 
-        if hasattr(self, 'std_val_acc') and std_pred is not None:
+        if hasattr(self, "std_val_acc") and std_pred is not None:
             _ = self.std_val_acc(std_pred, y_batch)
-            self.log('std_val_acc', self.std_val_acc)
+            self.log("std_val_acc", self.std_val_acc)
 
-        if hasattr(self, 'adv_val_acc') and adv_pred is not None:
+        if hasattr(self, "adv_val_acc") and adv_pred is not None:
             _ = self.adv_val_acc(adv_pred, y_batch)
-            self.log('adv_val_acc', self.adv_val_acc)
+            self.log("adv_val_acc", self.adv_val_acc)
 
-        self.log('val_loss', loss.item())  # Lightning automatically averages scalars over batches for validation
+        self.log("val_loss", loss.item())  # Lightning automatically averages scalars over batches for validation
         return loss
 
     def test_step(
         self,
         batch: Sequence[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
-        batch_idx: int
+        batch_idx: int,
     ) -> torch.Tensor:
         x_batch, y_batch = self._get_batch(batch)
         loss, std_pred, adv_pred = self.loss(x_batch, y_batch, return_pred=True)
 
-        if hasattr(self, 'std_test_acc') and std_pred is not None:
+        if hasattr(self, "std_test_acc") and std_pred is not None:
             _ = self.std_test_acc(std_pred, y_batch)
-            self.log('std_test_acc', self.std_test_acc)
+            self.log("std_test_acc", self.std_test_acc)
 
-        if hasattr(self, 'adv_test_acc') and adv_pred is not None:
+        if hasattr(self, "adv_test_acc") and adv_pred is not None:
             _ = self.adv_test_acc(adv_pred, y_batch)
-            self.log('adv_test_acc', self.adv_test_acc)
+            self.log("adv_test_acc", self.adv_test_acc)
 
-        self.log('test_loss', loss.item())  # Lightning automatically averages scalars over batches for testing
+        self.log("test_loss", loss.item())  # Lightning automatically averages scalars over batches for testing
         return loss

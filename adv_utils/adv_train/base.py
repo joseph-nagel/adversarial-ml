@@ -1,4 +1,4 @@
-'''Adv. training base class.'''
+"""Adv. training base class."""
 
 from collections.abc import Callable, Sequence
 
@@ -10,7 +10,7 @@ from ..adv_attacks import AdversarialAttack
 
 
 class AdversarialTraining(LightningModule):
-    '''
+    """
     Adversarial training.
 
     Parameters
@@ -26,7 +26,7 @@ class AdversarialTraining(LightningModule):
     lr : float
         Initial optimizer learning rate.
 
-    '''
+    """
 
     def __init__(
         self,
@@ -34,7 +34,7 @@ class AdversarialTraining(LightningModule):
         criterion: nn.Module | Callable[[torch.Tensor], torch.Tensor],
         attack: AdversarialAttack,
         alpha: float = 0.5,
-        lr: float = 1e-04
+        lr: float = 1e-04,
     ):
         super().__init__()
 
@@ -48,15 +48,15 @@ class AdversarialTraining(LightningModule):
         self.attack = attack
 
         # set weight parameter
-        self.alpha = min(1., max(0., alpha))
+        self.alpha = min(1.0, max(0.0, alpha))
 
         # set initial learning rate
         self.lr = abs(lr)
 
         # store hyperparams
         self.save_hyperparameters(
-            ignore=['model', 'criterion', 'attack'],
-            logger=True
+            ignore=["model", "criterion", "attack"],
+            logger=True,
         )
 
     @property
@@ -68,78 +68,78 @@ class AdversarialTraining(LightningModule):
         return 1 - self.alpha
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        '''Run model.'''
+        """Run model."""
         return self.model(x)
 
     def standard_loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-        '''Compute standard loss.'''
+        """Compute standard loss."""
         y_pred = self.model(x)
         return self.criterion(y_pred, y)
 
     def adversarial_loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-        '''Compute adversarial loss.'''
+        """Compute adversarial loss."""
         # perform attack (with gradients enabled)
         with torch.enable_grad():
             x_adv = self.attack(x, y)
         return self.standard_loss(x_adv, y)
 
     def loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-        '''Compute loss.'''
+        """Compute loss."""
         # compute standard loss
-        std_loss = self.standard_loss(x, y) if self.std_weight > 0. else 0.0
+        std_loss = self.standard_loss(x, y) if self.std_weight > 0.0 else 0.0
 
         # compute adversarial loss
-        adv_loss = self.adversarial_loss(x, y) if self.adv_weight > 0. else 0.0
+        adv_loss = self.adversarial_loss(x, y) if self.adv_weight > 0.0 else 0.0
 
         return self.std_weight * std_loss + self.adv_weight * adv_loss
 
     @staticmethod
     def _get_batch(
-        batch: tuple[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor]
+        batch: tuple[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
     ) -> tuple[torch.Tensor, torch.Tensor]:
-        '''Get batch features and labels.'''
+        """Get batch features and labels."""
 
         if isinstance(batch, Sequence):
             x_batch = batch[0]
             y_batch = batch[1]
 
         elif isinstance(batch, dict):
-            x_batch = batch['images']
-            y_batch = batch['labels']
+            x_batch = batch["images"]
+            y_batch = batch["labels"]
 
         else:
-            raise TypeError(f'Invalid batch type: {type(batch)}')
+            raise TypeError(f"Invalid batch type: {type(batch)}")
 
         return x_batch, y_batch
 
     def training_step(
         self,
         batch: tuple[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
-        batch_idx: int
+        batch_idx: int,
     ) -> torch.Tensor:
         x_batch, y_batch = self._get_batch(batch)
         loss = self.loss(x_batch, y_batch)
-        self.log('train_loss', loss.item())  # Lightning logs batch-wise scalars during training per default
+        self.log("train_loss", loss.item())  # Lightning logs batch-wise scalars during training per default
         return loss
 
     def validation_step(
         self,
         batch: tuple[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
-        batch_idx: int
+        batch_idx: int,
     ) -> torch.Tensor:
         x_batch, y_batch = self._get_batch(batch)
         loss = self.loss(x_batch, y_batch)
-        self.log('val_loss', loss.item())  # Lightning automatically averages scalars over batches for validation
+        self.log("val_loss", loss.item())  # Lightning automatically averages scalars over batches for validation
         return loss
 
     def test_step(
         self,
         batch: tuple[torch.Tensor, torch.Tensor] | dict[str, torch.Tensor],
-        batch_idx: int
+        batch_idx: int,
     ) -> torch.Tensor:
         x_batch, y_batch = self._get_batch(batch)
         loss = self.loss(x_batch, y_batch)
-        self.log('test_loss', loss.item())  # Lightning automatically averages scalars over batches for testing
+        self.log("test_loss", loss.item())  # Lightning automatically averages scalars over batches for testing
         return loss
 
     # TODO: enable LR scheduling
