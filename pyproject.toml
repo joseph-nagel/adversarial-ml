@@ -24,6 +24,7 @@ dependencies = [
     "tensorboard",
     "transformers",
     "adversarial-robustness-toolbox",
+    "omegaconf",
     "matplotlib",
     "notebook"
 ]
