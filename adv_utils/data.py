@@ -86,7 +86,7 @@ class Flowers102DataModule(LightningDataModule):
         _ = datasets.Flowers102(self.data_dir, split="test", download=True)
 
     def setup(self, stage: str) -> None:
-        """Set up train/test/val. datasets."""
+        """Set up train/val./test datasets."""
         # create train/val. datasets
         if stage in ("fit", "validate"):
             self.train_set = datasets.Flowers102(
@@ -117,7 +117,7 @@ class Flowers102DataModule(LightningDataModule):
                 drop_last=True,
                 shuffle=True,
                 num_workers=self.num_workers,
-                pin_memory=self.num_workers > 0,
+                pin_memory=self.num_workers > 0,  # use page-locked memory if data is fetched in a parallel subprocess
             )
         else:
             raise AttributeError("Train set has not been set")
