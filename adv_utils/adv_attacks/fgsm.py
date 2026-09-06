@@ -3,7 +3,7 @@
 from collections.abc import Callable, Sequence
 
 import torch
-import torch.nn as nn
+from torch import nn
 
 from .base import AdversarialAttack
 

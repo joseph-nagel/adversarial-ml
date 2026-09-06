@@ -3,7 +3,7 @@
 from collections.abc import Callable, Sequence
 
 import torch
-import torch.nn as nn
+from torch import nn
 from lightning.pytorch import LightningModule
 
 from ..adv_attacks import AdversarialAttack

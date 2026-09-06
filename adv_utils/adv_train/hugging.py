@@ -3,7 +3,7 @@
 from collections.abc import Sequence
 
 import torch
-import torch.nn as nn
+from torch import nn
 from torchmetrics.classification import Accuracy
 
 from ..hugging import HFClassifier
@@ -31,7 +31,7 @@ class AdversarialHFClassifier(AdversarialTraining):
             model_name,
             cache_dir=data_dir,
             num_labels=num_labels,
-            ignore_mismatched_sizes=False if num_labels is None else True,
+            ignore_mismatched_sizes=num_labels is not None,
         )
 
         # freeze/unfreeze parameters

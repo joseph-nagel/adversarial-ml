@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 
 import torch
-import torch.nn as nn
+from torch import nn
 
 
 class AdversarialAttack(nn.Module, ABC):

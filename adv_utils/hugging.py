@@ -3,7 +3,7 @@
 from typing import Self, Any
 
 import torch
-import torch.nn as nn
+from torch import nn
 from transformers import AutoModelForImageClassification
 
 

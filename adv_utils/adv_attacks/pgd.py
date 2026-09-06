@@ -4,13 +4,13 @@ from collections.abc import Callable, Sequence
 from math import prod
 
 import torch
-import torch.nn as nn
+from torch import nn
 
 from ..sample import sample_interval, sample_ball
 from .base import AdversarialAttack
 
 
-def _initialize(image: torch.Tensor, eps: float, p_norm: int | float = torch.inf):
+def _initialize(image: torch.Tensor, eps: float, p_norm: float = torch.inf):
     """Create random initializations."""
 
     # copy tensor
@@ -44,7 +44,7 @@ def _initialize(image: torch.Tensor, eps: float, p_norm: int | float = torch.inf
     return perturbed
 
 
-def _project(perturbed: torch.Tensor, image: torch.Tensor, eps: float, p_norm: int | float = torch.inf):
+def _project(perturbed: torch.Tensor, image: torch.Tensor, eps: float, p_norm: float = torch.inf):
     """Project to a neighborhood."""
 
     # rescale (if outside of l2-ball)
@@ -79,7 +79,7 @@ def pgd_attack(
     num_steps: int,
     step_size: float,
     eps: float,
-    p_norm: int | float = torch.inf,
+    p_norm: float = torch.inf,
     targeted: bool = False,
     random_init: bool = False,
 ) -> torch.Tensor:
@@ -154,7 +154,7 @@ class PGDAttack(AdversarialAttack):
         num_steps: int,
         step_size: float,
         eps: float,
-        p_norm: int | float = torch.inf,
+        p_norm: float = torch.inf,
         targeted: bool = False,
         random_init: bool = False,
     ):

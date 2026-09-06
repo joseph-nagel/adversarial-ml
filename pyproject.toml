@@ -26,11 +26,11 @@ dependencies = [
     "adversarial-robustness-toolbox",
     "omegaconf",
     "matplotlib",
-    "notebook"
+    "notebook",
 ]
 
 [project.optional-dependencies]
-dev = ["mypy", "ruff"]
+dev = ["mypy", "ruff", "pre-commit"]
 
 [project.urls]
 source = "https://github.com/joseph-nagel/adversarial-ml"
@@ -40,10 +40,10 @@ line-length = 120
 indent-width = 4
 
 [tool.ruff.lint]
-extend-select = ["E501"]  # include line-length violations that would be ignored otherwise (handled by formatter)
+extend-ignore = ["I001"]  # ignore import order
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]  # ignore unused imports in __init__.py
+"__init__.py" = ["F401"]  # ignore unused imports
 "*.ipynb" = ["E731"]  # ignore lambda expressions assigned to variables
 
 [tool.ruff.format]
